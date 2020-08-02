@@ -3,15 +3,48 @@ import React, { useState } from 'react';
 import data from './data.json'
 import Products from './components/Products'
 import Filter from './components/Filter';
+import Cart from './components/Cart'
 
 const App = () => {
   const [shoppingList, setShoppingList] = useState({
     products:   data.products,
+    cartItems:  [],
     size:       'ALL',
     sort:       ''
   })
   let newProducts               = ''
   let newObj                    = ''
+
+  const addToCart = product => {
+    console.log('AddToCart product: ', product)
+    const cartItems = shoppingList.cartItems.slice()
+    let inCart = false
+    cartItems.forEach(item => {
+      if (item._id === product._id) {
+        item.count++
+        inCart = true
+      }
+    })
+    if (!inCart) {
+      cartItems.push({ ...product, count: 1 })
+      console.log('First time Cart item: ', cartItems)
+    }
+    console.log('Cart items: ', cartItems)
+    setShoppingList({
+      ...shoppingList,
+      cartItems
+    })
+  }
+
+  const removeFromCart = product => {
+    console.log('Remove from cart: ', product)
+    const cartItems = shoppingList.cartItems.slice()
+    setShoppingList({
+      ...shoppingList,
+      cartItems: cartItems.filter(item => item._id !== product._id)
+    })
+    console.log('Cart items after removal: ', shoppingList.cartItems)
+  }
 
   // Sort products
   const sortProduct = (sort, prodList) => {
@@ -71,11 +104,11 @@ const App = () => {
           <div className='main'>
             <Filter count={shoppingList.products.length} size={shoppingList.size} sort={shoppingList.sort}
                 filterProducts={filterProducts} sortProducts={sortProducts} />
-            <Products products={shoppingList.products}></Products>
+            <Products products={shoppingList.products} addToCart={addToCart} />
           </div>
           {/* <-- Column Two for Cart items --> */}
           <div className='sidebar'>
-            Cart Items
+            <Cart cartItems={shoppingList.cartItems} removeFromCart={removeFromCart}/>
           </div>
         </div>
       </main>
