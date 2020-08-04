@@ -2,7 +2,6 @@ import React from 'react'
 import formatCurrency from '../util'
 
 const Products = ({ products, addToCart }) => {
-
     return (
         <div>
             <ul className='products'>
