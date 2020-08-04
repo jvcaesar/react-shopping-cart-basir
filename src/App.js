@@ -1,5 +1,5 @@
 // Feature 1
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import data from './data.json'
 import Products from './components/Products'
 import Filter from './components/Filter';
@@ -8,15 +8,25 @@ import Cart from './components/Cart'
 const App = () => {
   const [shoppingList, setShoppingList] = useState({
     products:   data.products,
-    cartItems:  [],
+    cartItems:  localStorage.getItem('cartItems') ? JSON.parse(localStorage.getItem('cartItems')) : [],
     size:       'ALL',
     sort:       ''
   })
   let newProducts               = ''
   let newObj                    = ''
 
+  // Update the state of the shopping cart
+  const updateCart = cartItems => {
+      setShoppingList({
+      ...shoppingList,
+      cartItems
+    })
+    console.log('Updated Cart items to: ', cartItems)
+  }
+
   const addToCart = product => {
-    console.log('AddToCart product: ', product)
+    //console.log('AddToCart product: ', product)
+    //console.log('start add to shopping cart:', shoppingList)
     const cartItems = shoppingList.cartItems.slice()
     let inCart = false
     cartItems.forEach(item => {
@@ -27,28 +37,32 @@ const App = () => {
     })
     if (!inCart) {
       cartItems.push({ ...product, count: 1 })
-      console.log('First time Cart item: ', cartItems)
+      //console.log('First time Cart item: ', cartItems)
     }
-    console.log('Cart items: ', cartItems)
-    setShoppingList({
-      ...shoppingList,
-      cartItems
-    })
+    //console.log('Cart items: ', cartItems)
+    updateCart(cartItems)
+    // This will not show the updated state of the shopping list
+    // It is useless here. It will only be seen in after/in the useEffect
+    //console.log('end add to shopping cart:', shoppingList)
   }
 
   const removeFromCart = product => {
-    console.log('Remove from cart: ', product)
-    const cartItems = shoppingList.cartItems.slice()
-    setShoppingList({
-      ...shoppingList,
-      cartItems: cartItems.filter(item => item._id !== product._id)
-    })
-    console.log('Cart items after removal: ', shoppingList.cartItems)
+    //console.log('Remove from cart: ', product)
+    let cartItems = shoppingList.cartItems.slice()
+    cartItems = cartItems.filter(item => item._id !== product._id)
+    updateCart(cartItems)
+    //console.log('Cart items after removal: ', cartItems)
   }
+
+  // updated shoppingList is only visible after useEffect
+  useEffect(() => {
+    localStorage.setItem('cartItems', JSON.stringify(shoppingList.cartItems))
+    console.log('Effect in shopping cart:', shoppingList)
+  }, [shoppingList])
 
   // Sort products
   const sortProduct = (sort, prodList) => {
-    console.log('sorter: ', sort, prodList)
+    console.log('Before sort: ', sort, prodList)
     return prodList.slice().sort((a, b) => (
       sort === 'lowest' ? ((a.price > b.price) ? 1 : -1) :
       sort === 'highest' ? ((a.price < b.price) ? 1 : -1) :
@@ -59,7 +73,7 @@ const App = () => {
   // Filter the products by size
   const filterProducts = (event) => {
     const size = event.target.value
-    console.log('event filterProducts by: ', size)
+    //console.log('event filterProducts by: ', size)
      if (size === 'ALL') {
        newProducts = data.products
      } else {
@@ -71,26 +85,24 @@ const App = () => {
       size,
       products:   newProducts
     }
-    console.log('filtered Products: ', newProducts, newObj)
     setShoppingList(newObj)
   }
 
   // Sort the products handler on change event
   const sortProducts = (event) => {
     const sort = event.target.value
-    console.log('event sortProducts by: ', sort)
-    newProducts = shoppingList.products.slice().sort((a, b) => (
-      sort === 'lowest' ? ((a.price > b.price) ? 1 : -1) :
-      sort === 'highest' ? ((a.price < b.price) ? 1 : -1) :
-      ((a._id > b._id) ? 1 : -1)
-    ))
+    newProducts = sortProduct(sort, shoppingList.products)
+    //console.log('After sort: ', newProducts)
     newObj = {
       ...shoppingList,
       sort,
       products:   newProducts
     }
-    console.log('Sorted Products: ', newProducts, newObj)
     setShoppingList(newObj)
+  }
+
+  const createOrder = order => {
+    alert('Need to save order for: ' + order.formInputs.name)
   }
 
   return (
@@ -108,7 +120,10 @@ const App = () => {
           </div>
           {/* <-- Column Two for Cart items --> */}
           <div className='sidebar'>
-            <Cart cartItems={shoppingList.cartItems} removeFromCart={removeFromCart}/>
+            <Cart 
+              cartItems={shoppingList.cartItems}
+              removeFromCart={removeFromCart}
+              createOrder={createOrder} />
           </div>
         </div>
       </main>

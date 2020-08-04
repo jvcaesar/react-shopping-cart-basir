@@ -1,3 +1,3 @@
 export default function formatCurrency(num) {
-    return '€' + Number(num.toFixed(1)).toLocaleString() + ' '
+    return '€' + Number((num/100)).toFixed(2).toLocaleString() + ' '
 }
