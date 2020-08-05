@@ -4,6 +4,8 @@ import data from './data.json'
 import Products from './components/Products'
 import Filter from './components/Filter';
 import Cart from './components/Cart'
+import store from './store'
+import { Provider } from 'react-redux'
 
 const App = () => {
   const [shoppingList, setShoppingList] = useState({
@@ -106,31 +108,33 @@ const App = () => {
   }
 
   return (
-    <div className="grid-container">
-      <header className="App-header">
-        <a href='/'>React Shopping Cart</a>
-      </header>
-      <main>
-        <div className='content'>
-          {/* <-- Column One for Product list --> */}
-          <div className='main'>
-            <Filter count={shoppingList.products.length} size={shoppingList.size} sort={shoppingList.sort}
-                filterProducts={filterProducts} sortProducts={sortProducts} />
-            <Products products={shoppingList.products} addToCart={addToCart} />
+    <Provider store={store}>
+      <div className="grid-container">
+        <header className="App-header">
+          <a href='/'>React Shopping Cart</a>
+        </header>
+        <main>
+          <div className='content'>
+            {/* <-- Column One for Product list --> */}
+            <div className='main'>
+              <Filter count={shoppingList.products.length} size={shoppingList.size} sort={shoppingList.sort}
+                  filterProducts={filterProducts} sortProducts={sortProducts} />
+              <Products products={shoppingList.products} addToCart={addToCart} />
+            </div>
+            {/* <-- Column Two for Cart items --> */}
+            <div className='sidebar'>
+              <Cart 
+                cartItems={shoppingList.cartItems}
+                removeFromCart={removeFromCart}
+                createOrder={createOrder} />
+            </div>
           </div>
-          {/* <-- Column Two for Cart items --> */}
-          <div className='sidebar'>
-            <Cart 
-              cartItems={shoppingList.cartItems}
-              removeFromCart={removeFromCart}
-              createOrder={createOrder} />
-          </div>
-        </div>
-      </main>
-      <footer>
-        All rights reserved ©Caesar Inc.
-      </footer>
-    </div>
+        </main>
+        <footer>
+          All rights reserved ©Caesar Inc.
+        </footer>
+      </div>
+    </Provider>
   );
 }
 
