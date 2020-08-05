@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import Fade from 'react-reveal/Fade'
 
 const CheckoutForm = (props) => {
     const cartItems = props.cartItems
@@ -45,6 +46,7 @@ const CheckoutForm = (props) => {
     }
 
     return (
+        <Fade right cascade>
         <div className='cart'>
             <form onSubmit={createOrder}>
                 <ul className='form-container'>
@@ -55,6 +57,7 @@ const CheckoutForm = (props) => {
                 </ul>
             </form>
         </div>
+        </Fade>
     )
 }
 
