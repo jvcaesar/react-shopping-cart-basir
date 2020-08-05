@@ -1,16 +1,26 @@
-import React, { useState, useRef, Fragment } from 'react'
+import React, { useState, useEffect, useRef, Fragment } from 'react'
 import formatCurrency from '../util'
 import Fade from 'react-reveal/Fade'
 import Modal from './Modal'
 import Zoom from 'react-reveal/Zoom'
+import { connect } from 'react-redux'
+import { fetchProducts } from '../actions/productActions'
 
 let counter = 0
 
-const Products = ({ products, addToCart }) => {
+const Products = (props) => {
+    const products = props.products
+    const addToCart = props.addToCart
+    const fetchProducts = props.fetchProducts
     const [product, setProduct] = useState(null)
 
     const modalRef = useRef()
     
+    useEffect(() => {
+        console.log('inside useEffect')
+        fetchProducts()
+    }, [])
+
     const openModal = product => {
         setProduct(product)
         console.log('Open modal: ', modalRef)
@@ -40,23 +50,26 @@ const Products = ({ products, addToCart }) => {
     return (
         <div>
             <Fade bottom cascade>
-            <ul className='products'>
-                {products.map(product => (
-                    <li key={product._id}>
-                        <div className='product'>
-                            <a href={'#' + product._id} onClick={() => openModal(product)}>
-                                <img src={product.image} alt={product.title}></img>
-                                <p className='sizes'><SizeList sizes={product.availableSizes} /></p>
-                                <p className='product-title'>{product.title}</p>
-                            </a>
-                            <div className='product-price'>
-                                <div>{formatCurrency(product.price)}</div>
-                                <button onClick={() => addToCart(product)} className='button primary'>Add to Cart</button>
+                {!products ? ( <div> Loading ... </div>) : (
+                <ul className='products'>
+                    {/* the first time product is null, so map will fail. Fixing this... */}
+                    {products.map(product => (
+                        <li key={product._id}>
+                            <div className='product'>
+                                <a href={'#' + product._id} onClick={() => openModal(product)}>
+                                    <img src={product.image} alt={product.title}></img>
+                                    <p className='sizes'><SizeList sizes={product.availableSizes} /></p>
+                                    <p className='product-title'>{product.title}</p>
+                                </a>
+                                <div className='product-price'>
+                                    <div>{formatCurrency(product.price)}</div>
+                                    <button onClick={() => addToCart(product)} className='button primary'>Add to Cart</button>
+                                </div>
                             </div>
-                        </div>
-                    </li>
-                ))}
-            </ul>
+                        </li>
+                    ))}
+                </ul>
+                )}
             </Fade>
             {product ? (
                  
@@ -85,19 +98,13 @@ const Products = ({ products, addToCart }) => {
                     </Zoom>
                 </Modal>
             ) : null}
-{/*             {product && (
-                <Modal isOpen={true} onRequestClose={closeModal}>
-                    <Zoom>
-                        <button className='close-modal' onClick={closeModal}>X</button>
-                        <div>
-                            Moooodddddaaaaallllllll
-                        </div>
-                    </Zoom>
-                </Modal>
-            )} */}
         </div>
     )
 
 }
 
-export default Products
+// connect products component to the products store
+// connect(parameter1, parameter2) and returns another fuction whih also accepts a parameter i.e. name of component we're going to connect
+// parameter1 = function that accepts state and returns an object that defines which part of redux state were using
+// parameter2 = list of actions inside an object
+export default connect((state) => ({ products: state.products.items }), { fetchProducts, })(Products)
