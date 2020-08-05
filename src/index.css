@@ -74,8 +74,9 @@ footer {
 }
 .products li {
   flex: 0 1 29rem;
-  height: 47rem;
+  height: 52rem;
   padding: 1rem;
+  margin-bottom: 1rem;
 }
 .product {
   display: flex;
@@ -182,4 +183,59 @@ form {
 input {
   padding: 1rem;
   border: 0.1rem #c0c0c0 solid;
+}
+/*********** My Modal **********/
+.modal-wrapper {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background-color: rgba(0,0,0,0.3);
+}
+.modal-box {
+  position: relative;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  height: 50%;
+  width: 80%;
+  overflow-y: auto;
+  background-color: white;
+  box-shadow: 0 0 10px rgba(0,0,0,0.25);
+  z-index: 101;
+  padding: 40px;
+}
+/************* Product Details ***************/
+.product-details {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  max-height: 96vh;
+}
+.product-details img {
+  max-height: 100vh;
+  max-width: 50rem;
+  margin: 0 auto;
+}
+.product-description {
+  flex: 1 1;
+  margin: 1rem;
+}
+.product-description h2 {
+  font-weight: bold;
+}
+.close-modal {
+  position: absolute;
+  right: 1rem;
+  top: 2.5rem;
+  z-index: 1000;
 }

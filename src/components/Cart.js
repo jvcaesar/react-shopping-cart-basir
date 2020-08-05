@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import formatCurrency from '../util'
 import CheckoutForm from './CheckoutForm'
-
+import Fade from 'react-reveal/Fade'
 
 const DisplayTotal = ({ cartItems, createOrder }) => {
     const [showCheckout, setShow] = useState(false)
@@ -47,6 +47,7 @@ const DisplayItem = ({ item, removeFromCart }) => {
 const DisplayCartItems = ({ cartItems, removeFromCart }) => {
     return (
         <div className='cart'>
+            <Fade left cascade>
             <ul className='cart-items'>
                 {cartItems.map(item => (
                     <div key={item._id}>
@@ -54,6 +55,7 @@ const DisplayCartItems = ({ cartItems, removeFromCart }) => {
                     </div>
                 ))}
             </ul>
+            </Fade>
         </div>
     )
 }
