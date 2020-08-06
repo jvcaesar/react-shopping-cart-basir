@@ -7,9 +7,10 @@ import { connect } from 'react-redux'
 import { fetchProducts } from '../actions/productActions'
 
 const Products = (props) => {
-    const products = props.products
-    const addToCart = props.addToCart
-    const fetchProducts = props.fetchProducts
+    const products = props.products                 // coming from connect -> state
+    const showProducts = props.showProducts         // coming from connect -> state
+    const addToCart = props.addToCart               // coming from App
+    const fetchProducts = props.fetchProducts       // coming from connect -> fetchproducts
     const [product, setProduct] = useState(null)
 
     const modalRef = useRef()
@@ -46,10 +47,10 @@ const Products = (props) => {
     return (
         <div>
             <Fade bottom cascade>
-                {!products ? ( <div> Loading ... </div>) : (
+                {!showProducts ? ( <div> Loading ... </div>) : (
                 <ul className='products'>
                     {/* the first time product is null, so map will fail. Fixing this... */}
-                    {products.map(product => (
+                    {showProducts.map(product => (
                         <li key={product._id}>
                             <div className='product'>
                                 <a href={'#' + product._id} onClick={() => openModal(product)}>
@@ -103,4 +104,7 @@ const Products = (props) => {
 // connect(parameter1, parameter2) and returns another fuction whih also accepts a parameter i.e. name of component we're going to connect
 // parameter1 = function that accepts state and returns an object that defines which part of redux state were using
 // parameter2 = list of actions inside an object
-export default connect((state) => ({ products: state.products.items }), { fetchProducts, })(Products)
+export default connect((state) => (
+    { products: state.products.items,
+        showProducts: state.products.showProducts }), 
+    { fetchProducts, })(Products)
