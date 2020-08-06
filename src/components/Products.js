@@ -6,8 +6,6 @@ import Zoom from 'react-reveal/Zoom'
 import { connect } from 'react-redux'
 import { fetchProducts } from '../actions/productActions'
 
-let counter = 0
-
 const Products = (props) => {
     const products = props.products
     const addToCart = props.addToCart
@@ -16,20 +14,18 @@ const Products = (props) => {
 
     const modalRef = useRef()
     
+    // This executes after the first render
     useEffect(() => {
         console.log('inside useEffect')
         fetchProducts()
     }, [])
 
-    const openModal = product => {
-        setProduct(product)
+    const openModal = async product => {
+        await setProduct(product)
+        // modalRef was not getting set the first time, probably because "product was not set"
+        // so I added the async/await to setProduct and it works. Otherwise, I was increasing a counter by 1
         console.log('Open modal: ', modalRef)
-        // For some reason the first time it is undefined, so skipping the first one
-        if (counter === 0){
-            counter++
-        } else {
-            modalRef.current.openModal()
-        }
+        modalRef.current.openModal()
     }
 
     const closeModal = () => {
@@ -71,7 +67,7 @@ const Products = (props) => {
                 </ul>
                 )}
             </Fade>
-            {product ? (
+            {product && (
                  
                 <Modal ref={modalRef}>
                     <Zoom>
@@ -97,7 +93,7 @@ const Products = (props) => {
                         
                     </Zoom>
                 </Modal>
-            ) : null}
+            )}
         </div>
     )
 
