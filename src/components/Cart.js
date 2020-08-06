@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 import formatCurrency from '../util'
 import CheckoutForm from './CheckoutForm'
 import Fade from 'react-reveal/Fade'
+import { connect } from 'react-redux'
+import { removeFromCart } from '../actions/cartActions'
 
 const DisplayTotal = ({ cartItems, createOrder }) => {
     const [showCheckout, setShow] = useState(false)
@@ -75,4 +77,6 @@ const Cart = ({ cartItems, removeFromCart, createOrder }) => {
     )
 }
 
-export default Cart
+// first parameter in connect is "state" -> map to props
+// second parameter is defining the actions
+export default connect((state) => ({ cartItems: state.cart.cartItems }), { removeFromCart })(Cart)

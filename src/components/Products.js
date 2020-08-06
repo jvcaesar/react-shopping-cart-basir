@@ -5,11 +5,12 @@ import Modal from './Modal'
 import Zoom from 'react-reveal/Zoom'
 import { connect } from 'react-redux'
 import { fetchProducts } from '../actions/productActions'
+import { addToCart } from '../actions/cartActions'
 
 const Products = (props) => {
     const products = props.products                 // coming from connect -> state
     const showProducts = props.showProducts         // coming from connect -> state
-    const addToCart = props.addToCart               // coming from App
+    const addToCart = props.addToCart               // coming from connect -> addToCart
     const fetchProducts = props.fetchProducts       // coming from connect -> fetchproducts
     const [product, setProduct] = useState(null)
 
@@ -107,4 +108,4 @@ const Products = (props) => {
 export default connect((state) => (
     { products: state.products.items,
         showProducts: state.products.showProducts }), 
-    { fetchProducts, })(Products)
+    { fetchProducts, addToCart })(Products)
