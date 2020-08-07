@@ -262,3 +262,17 @@ input {
 .success-message {
   color: green;
 }
+/* Orders */
+.orders {
+  width: 100%;
+  padding: 15px;
+}
+tbody > tr:nth-child(odd) {
+  background-color: #f0f0f0;
+}
+td {
+  padding: 8px;
+}
+th {
+  text-align: left;
+}

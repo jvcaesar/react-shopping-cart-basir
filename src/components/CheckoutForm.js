@@ -117,5 +117,5 @@ const CheckoutForm = (props) => {
 }
 
 export default connect(
-    (state) => ({ order: state.order.order }),
+    (state) => ({ order: state.order.order, }),
         { createOrder, clearOrder })(CheckoutForm)
