@@ -1,4 +1,4 @@
-import { CREATE_ORDER, CLEAR_ORDER, CLEAR_CART } from '../types'
+import { CREATE_ORDER, CLEAR_ORDER, FETCH_ORDERS } from '../types'
 
 export const orderReducer = (state = {}, action) => {
     switch (action.type) {
@@ -7,8 +7,12 @@ export const orderReducer = (state = {}, action) => {
             return { order: action.payload }
         case CLEAR_ORDER:
             return { order: null }
-/*         case CLEAR_CART:
-            return { cartItems: null } */
+        case FETCH_ORDERS:
+            console.log('Done fetching')
+            return { 
+                orders: action.payload,
+                fetched: true 
+            }
         default:
             return state
         }

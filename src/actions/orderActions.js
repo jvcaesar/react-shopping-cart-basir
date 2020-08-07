@@ -1,9 +1,7 @@
-import { CREATE_ORDER, CLEAR_ORDER, CLEAR_CART } from '../types'
+import { CREATE_ORDER, CLEAR_ORDER, CLEAR_CART, FETCH_ORDERS } from '../types'
 
 
 export const createOrder = (order) => (dispatch) => {
-    console.log('Action Create Order:', order)
-    console.log('Action Create stringify Order:', JSON.stringify(order))
     // Post the order to the api for saving in the backend DB
     fetch('api/orders', {
         method: 'POST',
@@ -14,7 +12,6 @@ export const createOrder = (order) => (dispatch) => {
     })
     .then((res) => res.json())              // response from fetch is converted to json
     .then((orderData) => {                  // returned data is orderDat in json format
-        console.log('before dispatch, orderData', orderData)
         dispatch({
             type: CREATE_ORDER,
             payload: orderData
@@ -26,4 +23,12 @@ export const createOrder = (order) => (dispatch) => {
 
 export const clearOrder = () => (dispatch) => {
     dispatch({ type: CLEAR_ORDER })
+}
+
+export const fetchOrders = () => (dispatch) => {
+    fetch("/api/orders")
+    .then((res) => res.json())
+    .then((data) => {
+      dispatch({ type: FETCH_ORDERS, payload: data });
+    });
 }

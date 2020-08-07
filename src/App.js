@@ -1,43 +1,31 @@
-// Feature 1
 import React from 'react';
 //import data from './data.json'
-import Products from './components/Products'
-import Filter from './components/Filter';
-import Cart from './components/Cart'
+
 import store from './store'
 import { Provider } from 'react-redux'
+import { BrowserRouter, Route, Link } from 'react-router-dom'
+import HomeScreen from "./screens/HomeScreen"
+import AdminScreen from "./screens/AdminScreen"
 
 const App = () => {
 
-  // updated shoppingList is only visible after useEffect
-/*   useEffect(() => {
-    localStorage.setItem('cartItems', JSON.stringify(shoppingList.cartItems))
-    console.log('Effect in shopping cart:', shoppingList)
-  }, [shoppingList])
- */
   return (
     <Provider store={store}>
-      <div className="grid-container">
-        <header className="App-header">
-          <a href='/'>React Shopping Cart</a>
-        </header>
-        <main>
-          <div className='content'>
-            {/* <-- Column One for Product list --> */}
-            <div className='main'>
-              <Filter />
-              <Products />
-            </div>
-            {/* <-- Column Two for Cart items --> */}
-            <div className='sidebar'>
-              <Cart />
-            </div>
-          </div>
-        </main>
-        <footer>
-          All rights reserved ©Caesar Inc.
-        </footer>
-      </div>
+      <BrowserRouter>
+        <div className="grid-container">
+          <header className="App-header">
+            <Link to='/'>React Shopping Cart</Link>
+            <Link to='/admin'>Admin</Link>
+          </header>
+          <main>
+            <Route path="/admin" component={AdminScreen} />
+            <Route path="/" component={HomeScreen} exact />
+          </main>
+          <footer>
+            All rights reserved ©Caesar Inc.
+          </footer>
+        </div>
+      </BrowserRouter>
     </Provider>
   );
 }
