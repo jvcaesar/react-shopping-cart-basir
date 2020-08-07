@@ -79,4 +79,6 @@ const Cart = ({ cartItems, removeFromCart, createOrder }) => {
 
 // first parameter in connect is "state" -> map to props
 // second parameter is defining the actions
-export default connect((state) => ({ cartItems: state.cart.cartItems }), { removeFromCart })(Cart)
+export default connect(
+    (state) => ({ cartItems: state.cart.cartItems }),
+        { removeFromCart })(Cart)
