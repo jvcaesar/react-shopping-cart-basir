@@ -8,7 +8,7 @@ import { fetchProducts } from '../actions/productActions'
 import { addToCart } from '../actions/cartActions'
 
 const Products = (props) => {
-    const products = props.products                 // coming from connect -> state
+    //const products = props.products                 // coming from connect -> state
     const showProducts = props.showProducts         // coming from connect -> state
     const addToCart = props.addToCart               // coming from connect -> addToCart
     const fetchProducts = props.fetchProducts       // coming from connect -> fetchproducts
